@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2>Welcome, {{ hospital.name }}</h2>
+<p>Address: {{ hospital.address }}</p>
+
+<h3>Update Inventory</h3>
+<form action="/update_blood" method="POST">
+    <select name="blood_group">
+        {% for bg in ['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'] %}
+        <option value="{{ bg }}">{{ bg }}</option>
+        {% endfor %}
+    </select>
+    <input type="number" name="quantity" placeholder="Units" required>
+    <button type="submit">Update</button>
+</form>
+
+<h3>Current Live Stock</h3>
+<table>
+    <tr><th>Group</th><th>Units</th><th>Status</th></tr>
+    {% for item in inventory %}
+    <tr>
+        <td>{{ item.blood_group }}</td>
+        <td>{{ item.quantity }}</td>
+        <td>{{ "Expired" if item.last_updated < limit else "Fresh" }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
